@@ -90,13 +90,24 @@ th:first-child,td:first-child{text-align:start}
 label.tg{display:flex;gap:10px;align-items:center;margin-bottom:10px}
 .ft{margin:0 0 16px;padding-inline-start:20px}
 footer{padding:20px 0;color:var(--mute);font-size:14px;border-top:1px solid var(--line)}
+dialog{border:0;border-radius:20px;padding:20px;max-width:480px;width:calc(100% - 32px);background:var(--surface);color:var(--ink);max-height:85vh;overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+.dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.dh h2{margin:0;font-size:20px}
+.fq{border-bottom:1px solid var(--line);padding:8px 0}
+.fq summary{cursor:pointer;font-weight:600}
+.fq p{margin:6px 0 0;color:var(--mute);font-size:15px}
+.lk{display:flex;gap:8px;flex-wrap:wrap}
+.lk a{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 14px;color:var(--ink);text-decoration:none;font-weight:600}
+textarea{display:block;width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:90px;margin:8px 0}
+.danger{color:var(--coral);border-color:var(--coral)}
 @media (max-width:780px){.app{grid-template-columns:1fr}.res{position:static;order:-1}.stats{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div class="logo">ميزاني</div><div class="hd"><span class="tag" id="pt" hidden></span><button class="ic" id="theme" aria-label="تغيير المظهر">◐</button></div></header>
+<header><div class="logo">ميزاني</div><div class="hd"><span class="tag" id="pt" hidden></span><button class="ic" id="theme" aria-label="تغيير المظهر">◐</button><button class="ic" id="menu" aria-label="خيارات">☰</button></div></header>
 <h1>اعرف كم تقدر تصرف اليوم، بدون ما تخرب ميزانيتك</h1>
 <p class="lead">أدخل راتبك والتزاماتك، وسجّل مصروفك خلال اليوم، وشوف المتبقي يتحدّث قدامك.</p>
 
@@ -111,7 +122,9 @@ footer{padding:20px 0;color:var(--mute);font-size:14px;border-top:1px solid var(
 <footer>ميزاني — ميزانيتك.. لحياة أفضل</footer>
 </div>
 
+<dialog id="dlg" aria-label="الخيارات"></dialog>
 <script>
+var CONTACT={whatsapp:"",email:"",tiktok:""};
 var KEY="mizani3",CATS=[["🍔","مطاعم"],["⛽","بنزين"],["☕","قهوة"],["🛒","مشتريات"],["🎬","ترفيه"],["📦","أخرى"]],
 MON=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"],
 PL=[["محافظة","مصروف أعلى",.6],["متوازنة","توازن",1],["ادخار سريع","ادخار أعلى",1.5]],
@@ -215,6 +228,29 @@ document.addEventListener("click",function(e){var t=e.target.closest("button");i
   else if(id==="trial"){S.sub={start:Date.now()};S.tab="an";save();go()}
   else if(id==="exp"){var u=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"})),a=document.createElement("a");a.href=u;a.download="mizani-backup.json";a.click()}
   else if(id==="theme"){var dk=document.documentElement.getAttribute("data-theme")==="dark"||(!S.theme&&matchMedia("(prefers-color-scheme:dark)").matches);S.theme=dk?"light":"dark";theme();save()}});
+function openMenu(){
+  var C=CONTACT,can=C.whatsapp||C.email,
+  faq=[["بياناتي ما ظهرت في جهاز ثاني","البيانات تنحفظ في متصفح كل جهاز. في Pro تقدر تنزّل نسخة احتياطية من تبويب التقارير وتستعيدها على الجهاز الثاني."],
+  ["وش معنى الرقم في الحلقة","هو المتبقي من ميزانيتك اليومية بعد مصروفات اليوم."],
+  ["وش اللي يتضمنه Pro","التحليل، التنبيهات، مقارنة الخطط، التقارير، وأهداف ادخار متعددة. التبويبات اللي عليها 🔒 تفتح بالاشتراك."]],
+  links=[];
+  if(C.whatsapp)links.push('<a href="https://wa.me/'+C.whatsapp.replace(/\D/g,"")+'" target="_blank" rel="noopener noreferrer">واتساب</a>');
+  if(C.email)links.push('<a href="mailto:'+esc(C.email)+'">البريد</a>');
+  if(C.tiktok)links.push('<a href="'+esc(C.tiktok)+'" target="_blank" rel="noopener noreferrer">TikTok</a>');
+  $("dlg").innerHTML='<div class="dh"><h2>الخيارات</h2><button class="x" id="dx" aria-label="إغلاق">×</button></div>'+
+  '<h3>الدعم الفني</h3>'+faq.map(function(f){return'<details class="fq"><summary>'+f[0]+'</summary><p>'+f[1]+'</p></details>'}).join("")+
+  (can?'<h3>أرسل لنا مشكلتك</h3><select id="spt" aria-label="الموضوع"><option>مشكلة تقنية</option><option>الدفع والاشتراك</option><option>اقتراح</option></select><textarea id="spm" placeholder="اكتب رسالتك هنا" aria-label="الرسالة"></textarea><button class="btn" id="spsend">إرسال</button>':"")+
+  (links.length?'<h3>التواصل</h3><div class="lk">'+links.join("")+'</div>':"")+
+  '<h3>بياناتك</h3><p class="muted">بياناتك محفوظة في متصفحك فقط، وما نجمع بيانات بطاقات.</p><button class="sm danger" id="wipe">حذف كل بياناتي</button>';
+  $("dlg").showModal();
+}
+document.addEventListener("click",function(e){var d=$("dlg"),t=e.target;if(t===d)return d.close();var b=t.closest("button");if(!b)return;
+  if(b.id==="menu")openMenu();
+  else if(b.id==="dx")d.close();
+  else if(b.id==="wipe"){if(confirm("تحذف كل بياناتك؟ ما يمكن التراجع.")){try{localStorage.removeItem(KEY)}catch(x){}location.reload()}}
+  else if(b.id==="spsend"){var m=$("spm").value.trim();if(!m)return $("spm").focus();var tx="["+$("spt").value+"] "+m;
+    if(CONTACT.whatsapp)window.open("https://wa.me/"+CONTACT.whatsapp.replace(/\D/g,"")+"?text="+encodeURIComponent(tx),"_blank","noopener");
+    else location.href="mailto:"+CONTACT.email+"?subject="+encodeURIComponent("دعم ميزاني")+"&body="+encodeURIComponent(tx)}});
 theme();go();
 </script>
 </body>
