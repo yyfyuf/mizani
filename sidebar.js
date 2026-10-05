@@ -1,6 +1,7 @@
 (function(){
 /* الصق هنا إعدادات Firebase الخاصة بك */
-var CFG={apiKey:"PASTE_API_KEY",authDomain:"PASTE.firebaseapp.com",projectId:"PASTE",appId:"PASTE"};
+var CFG={apiKey:"AIzaSyAcekD3uOnosbFcC7bLAERqpuL-uGGAc8o",authDomain:"mizanj-15728.firebaseapp.com",projectId:"mizanj-15728",appId:"1:1020983482594:web:fee2356150d832253fe6bb"};
+
 
 var css=".au{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;padding:20px;overflow:auto}.au.h{display:none}"+
 ".au-c{width:100%;max-width:380px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:24px;padding:26px 22px}"+
