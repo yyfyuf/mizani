@@ -103,6 +103,13 @@ textarea{display:block;width:100%;font:inherit;color:var(--ink);background:var(-
 .danger{color:var(--coral);border-color:var(--coral)}
 @media (max-width:780px){.app{grid-template-columns:1fr}.res{position:static;order:-1}.stats{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+:root:not(#z){--bg:#06161A;--surface:#0C2227;--ink:#E8F6F0;--mute:#8DB3A8;--line:#17453F;--green:#3DDC97;--onacc:#06231A;--amber:#F3B63F;--coral:#F07B63}
+body{background:radial-gradient(120% 60% at 50% 0,#0F3A36 0,#06161A 60%) fixed}
+.panel,dialog{background:linear-gradient(160deg,#0E2B2E,#0A1F24);border:1px solid #17453F;border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.res{background:linear-gradient(150deg,#0F3B35,#0A2A2C);border:1px solid #1E5A50;color:var(--ink)}
+.btn{border-radius:14px;background:linear-gradient(135deg,#3DDC97,#2FC48A)}
+input,select{background:#08191D;border-radius:14px}
+
 </style>
 </head>
 <body>
