@@ -16,7 +16,9 @@ var css=".au{position:fixed;inset:0;z-index:100;background:var(--bg);display:gri
 ".au-m{min-height:1.6em;font-size:14px;color:var(--coral);margin:4px 0}.au-m.ok{color:var(--green)}";
 var st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 
-var ov=document.createElement("div");ov.className="au";
+var ov=document.createElement("div");ov.className="au h"
+
+  
 ov.innerHTML='<form class="au-c" id="auf" novalidate><div class="au-l">ميزاني</div><h2 id="aut"></h2><p id="aus"></p>'+
 '<input id="aue" type="email" autocomplete="email" placeholder="البريد الإلكتروني" aria-label="البريد الإلكتروني">'+
 '<input id="aup" type="password" autocomplete="current-password" placeholder="كلمة المرور" aria-label="كلمة المرور">'+
@@ -24,7 +26,8 @@ ov.innerHTML='<form class="au-c" id="auf" novalidate><div class="au-l">ميزا�
 '<div class="au-r"><button type="button" class="au-t" id="aum2"></button><button type="button" class="au-t" id="aur">نسيت كلمة المرور؟</button></div></form>';
 document.body.appendChild(ov);
 var $=function(i){return document.getElementById(i)};
-var mode="in",auth=null;
+var mode="in",auth=null,pend=null;
+
 
 function view(){
   var i=mode==="in";
@@ -82,4 +85,34 @@ load(B+"firebase-app-compat.js",function(){load(B+"firebase-auth-compat.js",func
   auth.onAuthStateChanged(function(u){
     if(u){ov.classList.add("h");logoutBtn();$("aup").value="";sync(u.uid)}
     else{var l=$("lgo");l&&l.remove();ov.classList.remove("h")}})})})});
-})();
+})();var pend=null,want=false;
+function openLogin(){want=true;ov.classList.remove("h")}
+new MutationObserver(function(){
+  if(!want&&!ov.classList.contains("h"))ov.classList.add("h");
+}).observe(ov,{attributes:true,attributeFilter:["class"]});
+function loginBtn(){
+  if($("lgi"))return;var hd=document.querySelector(".hd");if(!hd)return;
+  var b=document.createElement("button");b.className="sm";b.id="lgi";b.textContent="دخول";
+  b.onclick=openLogin;hd.insertBefore(b,hd.firstChild);
+}
+var cx=document.createElement("button");cx.type="button";cx.textContent="✕";cx.setAttribute("aria-label","إغلاق");
+cx.style.cssText="position:absolute;top:16px;inset-inline-end:16px;background:none;border:0;color:var(--mute);font-size:26px;cursor:pointer";
+cx.onclick=function(){want=false;pend=null;ov.classList.add("h")};ov.appendChild(cx);
+document.addEventListener("click",function(e){
+  var b=e.target.closest&&e.target.closest("button");
+  if(!b||(auth&&auth.currentUser))return;
+  if(b.id==="trial"||b.id==="gadd"||b.dataset.pick!==undefined){
+    e.stopPropagation();e.preventDefault();
+    pend=function(){b.click()};openLogin();
+  }
+},true);
+var iv=setInterval(function(){
+  if(!auth)return;clearInterval(iv);
+  auth.onAuthStateChanged(function(u){
+    var g=$("lgi");
+    if(u){g&&g.remove();want=false;ov.classList.add("h");if(pend){var f=pend;pend=null;setTimeout(f,700)}}
+    else{loginBtn()}
+  });
+},150);
+
+
