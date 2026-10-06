@@ -137,6 +137,38 @@ h1{font-size:clamp(22px,6vw,30px);line-height:1.4;margin:6px 0 8px;max-width:non
 .mt,.cb i,.bar{border-radius:8px}
 .tag{background:linear-gradient(135deg,#F3B63F,#E9A52A);box-shadow:0 4px 14px rgba(243,182,63,.25)}
 .ic{background:rgba(61,220,151,.08);border:1px solid #17453F;border-radius:14px}
+.ringbox{width:min(170px,50%);margin:0 auto 6px}
+.mid .fx{font-size:clamp(32px,9vw,42px)}
+.mid small{font-size:12px}
+.wk{font-size:15px;margin-bottom:10px}
+.res .lg{gap:8px}
+.res .lg li{background:rgba(255,255,255,.04);border:1px solid rgba(61,220,151,.18);border-radius:14px;padding:8px 12px}
+.res .note{border-top:0;background:rgba(240,123,99,.10);border:1px solid rgba(240,123,99,.3);border-radius:14px;padding:10px 12px;min-height:0}
+.tr{stroke:rgba(61,220,151,.18)}
+/* الدائرة والأرقام */
+.ringbox{width:min(170px,50%);margin:0 auto 6px}
+.mid .fx{font-size:clamp(32px,9vw,42px)}
+.mid small{font-size:12px}
+.wk{font-size:15px;margin-bottom:10px}
+.tr{stroke:rgba(61,220,151,.18)}
+.res .lg{gap:8px}
+.res .lg li{background:rgba(255,255,255,.04);border:1px solid rgba(61,220,151,.18);border-radius:14px;padding:8px 12px}
+.res .note{border-top:0;background:rgba(240,123,99,.10);border:1px solid rgba(240,123,99,.3);border-radius:14px;padding:10px 12px;min-height:0}
+
+/* الشريط السفلي: 5 تبويبات ظاهرة والباقي بالسحب */
+.tabs{overflow-x:auto;justify-content:flex-start;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:0 0 calc(20% - 2px);min-width:66px}
+
+/* الأزرار والبطاقات والنوافذ */
+.chips button{background:rgba(61,220,151,.08);border-color:#17453F}
+.plans button,.pk button{background:rgba(255,255,255,.04);border-color:#17453F;border-radius:16px}
+.lk a{background:rgba(61,220,151,.08);border-color:#17453F;border-radius:14px}
+.al{border-radius:14px}
+textarea{background:#08191D;border-radius:14px;border-color:#17453F}
+dialog::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(6px)}
+footer{border-top-color:#17453F}
+.btn:active,.tabs button:active{transform:scale(.97)}
 
 </style>
 </head>
