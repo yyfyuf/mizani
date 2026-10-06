@@ -109,6 +109,17 @@ body{background:radial-gradient(120% 60% at 50% 0,#0F3A36 0,#06161A 60%) fixed}
 .res{background:linear-gradient(150deg,#0F3B35,#0A2A2C);border:1px solid #1E5A50;color:var(--ink)}
 .btn{border-radius:14px;background:linear-gradient(135deg,#3DDC97,#2FC48A)}
 input,select{background:#08191D;border-radius:14px}
+body{padding-bottom:100px}
+.tabs{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:min(640px,calc(100% - 20px));z-index:50;margin:0;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));background:rgba(8,25,29,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid #17453F;border-radius:22px;box-shadow:0 10px 30px rgba(0,0,0,.5);gap:2px}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;padding:6px 4px;border-radius:16px;color:var(--mute)}
+.tabs button::before{content:"•";font-size:20px;line-height:1}
+.tabs button[aria-selected=true]{background:rgba(61,220,151,.14);color:var(--green);box-shadow:none}
+.tabs button[data-tab="plan"]::before{content:"🏠"}
+.tabs button[data-tab="today"]::before{content:"📅"}
+.tabs button[data-tab="goal"]::before{content:"🎯"}
+.tabs button[data-tab="an"]::before{content:"📊"}
+.tabs button[data-tab="al"]::before{content:"🔔"}
+.tabs button[data-tab="pl"]::before{content:"⭐"}
 
 </style>
 </head>
