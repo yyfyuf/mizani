@@ -255,57 +255,7 @@ theme();go();
 </script>
   <script src="sidebar.js"></script>
 <style>
-#au{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
-#au.on{display:flex}
-#au form{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;display:grid;gap:12px}
-#au h2{margin:0;font-size:24px}
-#au input{width:100%}
-#au p{margin:0;min-height:1.4em;font-size:14px;color:#F07B63}
-#au .lk2{display:flex;justify-content:space-between;font-size:15px}
-#au .lk2 a{color:var(--green);text-decoration:none}
-#aux{position:fixed;bottom:16px;inset-inline-start:16px;z-index:50}
-</style>
-<script type="module">
-import {login,register,resetPassword,logout,watchUser} from "./auth.js";
-const $=id=>document.getElementById(id);
-let mode="login";
-const box=document.createElement("div");
-box.id="au";
-box.innerHTML='<form id="auf"><h2 id="aut"></h2><input id="aue" type="email" placeholder="البريد الإلكتروني" autocomplete="email" required><input id="aup" type="password" placeholder="كلمة المرور" autocomplete="current-password"><p id="aum"></p><button class="btn" id="aub"></button><div class="lk2"><a href="#" id="aus"></a><a href="#" id="aur">نسيت كلمة المرور؟</a></div></form>';
-document.body.appendChild(box);
-const out=document.createElement("button");
-out.id="aux";out.className="sm";out.textContent="خروج";out.hidden=true;
-out.onclick=()=>logout();
-document.body.appendChild(out);
-function render(){
-  $("aut").textContent=mode==="login"?"تسجيل الدخول":"إنشاء حساب";
-  $("aub").textContent=mode==="login"?"دخول":"تسجيل";
-  $("aus").textContent=mode==="login"?"ما عندك حساب؟ سجّل":"عندي حساب، دخول";
-  $("aum").textContent="";
-}
-const ERR={
-  "auth/invalid-credential":"الإيميل أو كلمة المرور غلط.",
-  "auth/invalid-email":"صيغة الإيميل غير صحيحة.",
-  "auth/email-already-in-use":"هذا الإيميل مسجّل من قبل.",
-  "auth/weak-password":"كلمة المرور ضعيفة، استخدم 6 خانات على الأقل.",
-  "auth/too-many-requests":"محاولات كثيرة، جرّب بعد شوي.",
-  "auth/network-request-failed":"تأكد من الإنترنت."
-};
-$("aus").onclick=e=>{e.preventDefault();mode=mode==="login"?"register":"login";render()};
-$("aur").onclick=async e=>{
-  e.preventDefault();
-  const em=$("aue").value.trim();
-  if(!em){$("aum").textContent="اكتب إيميلك أول.";return}
-  try{await resetPassword(em);$("aum").style.color="var(--green)";$("aum").textContent="أرسلنا لك رابط إعادة التعيين."}
-  catch(x){$("aum").style.color="#F07B63";$("aum").textContent=ERR[x.code]||"صار خطأ، حاول مرة ثانية."}
-};
-$("auf").onsubmit=async e=>{
-  e.preventDefault();
-  $("aum").style.color="#F07B63";$("aum").textContent="";
-  const em=$("aue").value.trim(),pw=$("aup").value;
-  try{await (mode==="login"?login(em,pw):register(em,pw))}
-  catch(x){$("aum").textContent=ERR[x.code]||"صار خطأ، حاول مرة ثانية."}
-};
+
 render();
 watchUser(u=>{box.classList.toggle("on",!u);out.hidden=!u});
 </script>
