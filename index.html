@@ -308,6 +308,42 @@ document.addEventListener("click",function(e){var d=$("dlg"),t=e.target;if(t===d
     else location.href="mailto:"+CONTACT.email+"?subject="+encodeURIComponent("دعم ميزاني")+"&body="+encodeURIComponent(tx)}});
 theme();go();
 </script>
+  (function(){
+var st=document.createElement("style");st.textContent=`
+.r33{margin-top:22px;border:1px solid var(--line);border-radius:20px;padding:16px;background:var(--bg)}
+.r3h{display:flex;justify-content:space-between;align-items:center}.r3h h3{margin:0}
+.r3g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.r3p{border:1px solid var(--line);border-radius:14px;padding:10px 4px;text-align:center;background:var(--surface)}
+.r3p h4{margin:6px 0 2px;font-size:14px}.r3p small{color:var(--mute);font-size:11px;line-height:1.5;display:block}
+.r3r{width:62px;height:62px;margin:auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--line) 0)}
+.r3r b{width:48px;height:48px;border-radius:50%;background:var(--surface);display:grid;place-items:center;font-size:14px;color:var(--c)}
+.r3c{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--surface)}.r3c h4{margin:0 0 6px}.r3c p{margin:0 0 8px;font-size:14px;line-height:1.8}.r3k{color:var(--green);font-weight:700}
+#r33b{width:100%;margin-top:12px}
+.r3o{margin-top:12px;border:1px solid var(--green);border-radius:14px;padding:12px}
+.r3o div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:15px}
+.r3o p{margin:10px 0 0;line-height:1.8;font-size:14px}.r3w{color:var(--coral)}.r3y{color:var(--green)}
+`;document.head.appendChild(st);
+var R33=0,_pP=pPlan;
+function r33(){var b=base(),pro=isPro();
+  var ring=function(c,p,t,d){return'<div class="r3p"><div class="r3r" style="--c:'+c+';--p:'+p+'"><b>'+p+'%</b></div><h4>'+t+'</h4><small>'+d+'</small></div>'};
+  var h='<div class="r33"><div class="r3h"><h3>قاعدة 33%</h3><span class="tag">Pro</span></div><p class="muted">ما فيه راتب يكفي بدون خطة. قرّر، التزم، ونفّذ.</p><div class="r3g">'+
+    ring("var(--green)",33,"الالتزامات","أقساطك وفواتيرك، تندفع أول")+ring("#4AA8E8",33,"المصروف الشخصي","عِش حياتك داخل حدودك")+ring("var(--amber)",34,"بناء رأس المال","ينسحب أول الشهر")+'</div>'+
+    '<div class="r3c"><h4>قاعدة الاستمرارية</h4><p class="r3k">انتهى القسط؟ هذي أخطر لحظة على فلوسك.</p><p>أغلب الناس لما يخلص القسط يرفعون مصروفهم، وبعد سنة ما بقي لهم شي. أنت لا. حوّل نفس المبلغ لرأس مالك من أول شهر. ما حسّيت فيه قبل، فلا تحسّ فيه الحين.</p><p class="muted">مثال: قسطك 3,000 ريال. بعد انتهاء القرض استمر بتحويله: 3,000 × 12 = 36,000 ريال سنويًا.</p></div>'+
+    '<button class="btn" id="r33b">'+(pro?"":"🔒 ")+'ابدأ خطتي الحين</button><div id="r33o">';
+  if(R33&&pro){
+    if(b.sal>0){var sh=b.sal*.33,df=sh-b.O,cap=b.sal*.34+Math.max(df,0);
+      h+='<div class="r3o"><div><span>الالتزامات (33%)</span><span>'+fmt(sh)+' ريال</span></div><div><span>المصروف الشخصي (33%)</span><span>'+fmt(b.sal*.33)+' ريال</span></div><div><span>بناء رأس المال (34%)</span><span>'+fmt(b.sal*.34)+' ريال</span></div><div><span>التزاماتك الحالية</span><span>'+fmt(b.O)+' ريال</span></div><div><span>رأس مالك الشهري</span><span class="r3y">'+fmt(cap)+' ريال</span></div><div><span>سنويًا</span><span class="r3y">'+fmt(cap*12)+' ريال</span></div>'+
+        (df>=0?'<p class="r3y">ممتاز، التزاماتك تحت الـ33%. الفرق ('+fmt(df)+' ريال) لا تصرفه، حوّله لرأس مالك الحين. هذا قرارك، نفّذه.</p>':'<p class="r3w">صراحة: التزاماتك فوق الـ33% بـ '+fmt(-df)+' ريال. مو عيب، بس تحتاج خطة. كل قسط ينتهي، حوّله كله لرأس مالك لين ترجع للتوازن. قرّر اليوم.</p>')+
+        '<p><b>التزامي:</b> أحوّل '+fmt(cap)+' ريال لرأس مالي أول كل شهر، قبل ما أصرف أي ريال.</p></div>'}
+    else h+='<div class="r3o"><p class="r3w">ابدأ بالراتب. بدون رقم ما فيه خطة.</p></div>'}
+  return h+'</div></div>'}
+pPlan=function(){return _pP()+r33()};
+document.addEventListener("input",function(){if(R33){R33=0;var o=$("r33o");o&&(o.innerHTML="")}});
+document.addEventListener("click",function(e){var t=e.target.closest("button");if(!t||t.id!=="r33b")return;
+  if(isPro()){R33=1;panel();var o=$("r33o");o&&o.scrollIntoView({block:"nearest"})}else{S.tab="an";tabs();panel()}});
+panel();
+})();
+
 <script src="sidebar.js"></script>
   <script src="assistant.js"></script>
 </body>
