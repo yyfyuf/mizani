@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ميزاني للشركات</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1b2a;--sf:#142a40;--ink:#eaf2fb;--mute:#9db3c9;--line:#27425e;--blue:#4f8fe0;--green:#3ddc97;--gold:#e6b450;--coral:#ff7a6b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.7 'IBM Plex Sans Arabic',Tahoma,sans-serif}
+.w{max-width:640px;margin:0 auto;padding:18px 16px 48px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.logo{font-weight:700;font-size:22px;color:var(--blue)}
+.lo{background:none;border:1px solid var(--line);color:var(--mute);border-radius:10px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer}
+h1{font-size:26px;margin:0 0 6px}
+h2{font-size:19px;margin:26px 0 10px}
+.sub{color:var(--mute);margin:0 0 18px}
+.card{background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+label{display:block;font-size:14px;color:var(--mute);margin:12px 0 4px}
+input{width:100%;padding:12px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;direction:ltr;text-align:left}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn{display:block;width:100%;margin-top:16px;padding:14px;font:700 17px inherit;font-family:inherit;color:#fff;background:var(--blue);border:0;border-radius:12px;cursor:pointer;text-align:center;text-decoration:none}
+.btn:disabled{opacity:.6}
+.lk{background:none;border:0;color:var(--blue);font:inherit;cursor:pointer;padding:8px 0}
+.m{min-height:1.6em;margin-top:8px;font-size:14px;color:var(--coral)}
+.m.ok{color:var(--green)}
+.big{font-size:30px;font-weight:700;color:var(--green)}
+.row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.ls{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.ls input{width:22px;height:22px;margin-top:5px;flex:none;accent-color:var(--green)}
+.ls b{display:block}
+.ls span{color:var(--mute);font-size:14px}
+.bar{height:10px;background:var(--bg);border-radius:6px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--green);width:0;transition:width .3s}
+.tag{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:20px;padding:2px 12px;font-size:13px;color:var(--mute)}
+a.lnk{color:var(--blue)}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="top"><div class="logo">ميزاني للشركات</div><button class="lo hide" id="lo">خروج</button></div>
+
+<div id="v-load"><p class="sub">جاري التحميل...</p></div>
+
+<div id="v-login" class="hide">
+<h1 id="lt">تسجيل الدخول</h1>
+<p class="sub">للموظفين ومسؤولي الشركات.</p>
+<form id="lf" class="card" novalidate>
+<label for="e">البريد الإلكتروني</label><input id="e" type="email" autocomplete="email">
+<label for="p">كلمة المرور</label><input id="p" type="password" autocomplete="current-password">
+<div class="m" id="lm" role="alert"></div>
+<button class="btn" id="lb" type="submit">دخول</button>
+</form>
+<button class="lk" id="sw" type="button">ما عندك حساب؟ أنشئ حساب</button><br>
+<button class="lk" id="rs" type="button">نسيت كلمة المرور</button>
+<p class="sub">شركتك ما اشتركت بعد؟ <a class="lnk" href="companies.html">اطلب عرضًا تجريبيًا</a></p>
+</div>
+
+<div id="v-none" class="hide">
+<h1>حسابك غير مرتبط بشركة</h1>
+<p class="sub">اطلب من مسؤول شركتك إضافتك، أو تواصل معنا إذا شركتك مشتركة.</p>
+<a class="btn" href="companies.html">اطلب عرضًا تجريبيًا</a>
+<a class="btn" style="background:var(--sf);border:1px solid var(--line)" href="index.html">ميزاني للأفراد</a>
+</div>
+
+<div id="v-admin" class="hide">
+<h1>لوحة الشركة</h1>
+<div class="card">
+<div class="row"><span>الشركة</span><b id="an"></b></div>
+<div class="row"><span>الحالة</span><b id="as"></b></div>
+<div class="row"><span>المقاعد</span><b id="ac"></b></div>
+</div>
+<div class="card"><b>قريبًا</b><p class="sub" style="margin:4px 0 0">دعوة الموظفين وتقارير الاستخدام الإجمالية (بدون أي بيانات شخصية).</p></div>
+<button class="btn" id="seeEmp" type="button">عرض تجربة الموظف</button>
+</div>
+
+<div id="v-emp" class="hide">
+<span class="tag" id="en"></span>
+<h1 style="margin-top:10px">أهلاً بك في ميزاني</h1>
+<p class="sub">دروس قصيرة وأدوات تساعدك تنظّم راتبك.</p>
+
+<h2>الدروس <span class="tag" id="pc">0/4</span></h2>
+<div class="bar"><i id="pb"></i></div>
+<div class="card" id="lsn"></div>
+
+<h2>حاسبة الراتب</h2>
+<div class="card">
+<label for="sal">راتبك الشهري (ريال)</label><input id="sal" type="number" inputmode="numeric" min="0">
+<div id="calc"></div>
+</div>
+
+<h2>هدف الادخار</h2>
+<div class="card">
+<label for="ga">المبلغ المطلوب (ريال)</label><input id="ga" type="number" inputmode="numeric" min="0">
+<label for="gm">المدة (بالأشهر)</label><input id="gm" type="number" inputmode="numeric" min="1">
+<div id="gr" style="margin-top:12px"></div>
+<div class="m" id="gmsg"></div>
+</div>
+<button class="btn" id="back" type="button" style="display:none;background:var(--sf);border:1px solid var(--line)">رجوع للوحة الشركة</button>
+</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+var CFG={apiKey:"AIzaSyAcekD3uOnosbFcC7bLAERqpuL-uGGAc8o",authDomain:"mizanj-15728.firebaseapp.com",projectId:"mizanj-15728",appId:"1:1020983482594:web:fee2356150d832253fe6bb"};
+firebase.initializeApp(CFG);
+var auth=firebase.auth(),db=firebase.firestore();
+var $=function(i){return document.getElementById(i)};
+var user=null,company=null,role=null,prog={lessons:{}},up=false,isAdmin=false;
+var LS=[
+["l1","اعرف وين يروح راتبك","سجّل كل مصروفاتك لمدة أسبوع كامل، بدون استثناء."],
+["l2","قاعدة 33%","33% للالتزامات، 33% للمصروف الشخصي، و34% لبناء رأس المال."],
+["l3","صندوق الطوارئ","اجمع ما يعادل مصروف 3 أشهر قبل أي استثمار."],
+["l4","الحاجة والرغبة","قبل أي شراء كبير اسأل: هل أحتاجه فعلًا، أو أبغاه بس؟"]
+];
+function show(id){["load","login","none","admin","emp"].forEach(function(x){$("v-"+x).className=x===id?"":"hide"});
+  $("lo").className=(id==="login"||id==="load")?"lo hide":"lo"}
+var mode="in";
+function lview(){var i=mode==="in";$("lt").textContent=i?"تسجيل الدخول":"إنشاء حساب";
+  $("lb").textContent=i?"دخول":"إنشاء الحساب";
+  $("sw").textContent=i?"ما عندك حساب؟ أنشئ حساب":"عندك حساب؟ سجّل دخول";
+  $("p").autocomplete=i?"current-password":"new-password";$("lm").textContent=""}
+var ERR={"auth/invalid-email":"البريد غير صحيح.","auth/invalid-credential":"البريد أو كلمة المرور غير صحيحة.","auth/wrong-password":"البريد أو كلمة المرور غير صحيحة.","auth/user-not-found":"البريد أو كلمة المرور غير صحيحة.","auth/email-already-in-use":"البريد مسجّل من قبل.","auth/weak-password":"كلمة المرور 6 أحرف على الأقل.","auth/too-many-requests":"محاولات كثيرة، حاول بعد شوي."};
+function lmsg(t,ok){var m=$("lm");m.textContent=t;m.className="m"+(ok?" ok":"")}
+$("sw").onclick=function(){mode=mode==="in"?"up":"in";lview()};
+$("rs").onclick=function(){var e=$("e").value.trim();if(!e)return lmsg("اكتب بريدك أول.");
+  auth.sendPasswordResetEmail(e).then(function(){lmsg("أرسلنا لك رابط استعادة كلمة المرور.",1)}).catch(function(x){lmsg(ERR[x.code]||"صار خطأ.")})};
+$("lf").addEventListener("submit",function(ev){ev.preventDefault();
+  var e=$("e").value.trim(),p=$("p").value;if(!e||!p)return lmsg("عبّ البريد وكلمة المرور.");
+  lmsg("");$("lb").disabled=true;
+  (mode==="in"?auth.signInWithEmailAndPassword(e,p):auth.createUserWithEmailAndPassword(e,p))
+  .catch(function(x){lmsg(ERR[x.code]||"صار خطأ، حاول مرة ثانية.")}).then(function(){$("lb").disabled=false})});
+$("lo").onclick=function(){auth.signOut()};
+
+auth.onAuthStateChanged(function(u){
+  user=u;if(!u){company=null;role=null;show("login");lview();return}
+  show("load");
+  db.collection("memberships").where("uid","==",u.uid).limit(1).get().then(function(s){
+    if(s.empty){show("none");return}
+    var m=s.docs[0].data();role=m.role;
+    return db.collection("companies").doc(m.companyId).get().then(function(c){
+      if(!c.exists||c.data().status!=="active"){show("none");return}
+      company=c.data();
+      if(role==="admin"){isAdmin=true;renderAdmin()}else{renderEmp()}
+    })
+  }).catch(function(){show("none")});
+});
+
+function renderAdmin(){
+  $("an").textContent=company.name||"";
+  $("as").textContent="فعّالة";
+  $("ac").textContent=String(company.seats||0);
+  show("admin");
+}
+$("seeEmp").onclick=function(){renderEmp()};
+$("back").onclick=function(){renderAdmin()};
+
+function save(){
+  if(!user)return;
+  db.collection("learningProgress").doc(user.uid).set(prog,{merge:true}).catch(function(){});
+}
+function renderEmp(){
+  $("en").textContent=company.name||"";
+  $("back").style.display=isAdmin?"block":"none";
+  show("emp");
+  db.collection("learningProgress").doc(user.uid).get().then(function(d){
+    prog=d.exists?d.data():{};if(!prog.lessons)prog.lessons={};
+    drawL();
+    if(prog.goal){$("ga").value=prog.goal.amount||"";$("gm").value=prog.goal.months||"";goal()}
+  }).catch(function(){drawL()});
+}
+function drawL(){
+  var h="",n=0;
+  LS.forEach(function(l){var c=prog.lessons[l[0]]?"checked":"";if(c)n++;
+    h+='<label class="ls"><input type="checkbox" data-l="'+l[0]+'" '+c+'><div><b>'+l[1]+'</b><span>'+l[2]+'</span></div></label><hr style="border:0;border-top:1px solid var(--line);margin:12px 0">'});
+  $("lsn").innerHTML=h.replace(/<hr[^>]*>(?![\s\S]*<hr)/,"");
+  $("pc").textContent=n+"/"+LS.length;$("pb").style.width=(n/LS.length*100)+"%";
+  Array.prototype.forEach.call($("lsn").querySelectorAll("input"),function(i){
+    i.onchange=function(){prog.lessons[i.getAttribute("data-l")]=i.checked;
+      var k=0;for(var x in prog.lessons)if(prog.lessons[x])k++;
+      $("pc").textContent=k+"/"+LS.length;$("pb").style.width=(k/LS.length*100)+"%";save()}});
+}
+function f(n){return Math.round(n).toLocaleString("en-US")}
+$("sal").oninput=function(){
+  var s=parseFloat(this.value);
+  if(!(s>0)){$("calc").innerHTML="";return}
+  $("calc").innerHTML='<div class="row"><span>الالتزامات (33%)</span><b>'+f(s*.33)+'</b></div>'+
+  '<div class="row"><span>المصروف الشخصي (33%)</span><b>'+f(s*.33)+'</b></div>'+
+  '<div class="row"><span>بناء رأس المال (34%)</span><b style="color:var(--green)">'+f(s*.34)+'</b></div>'};
+function goal(){
+  var a=parseFloat($("ga").value),m=parseInt($("gm").value,10);
+  if(!(a>0)||!(m>0)){$("gr").innerHTML="";return}
+  $("gr").innerHTML='<div class="sub" style="margin:0">لازم تدخّر شهريًا</div><div class="big">'+f(a/m)+' ريال</div>';
+  prog.goal={amount:a,months:m};
+}
+$("ga").oninput=goal;$("gm").oninput=goal;
+$("ga").onchange=save;$("gm").onchange=save;
+</script>
+</body>
+</html>
