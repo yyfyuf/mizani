@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ميزاني للشركات</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1a14;--surface:#12261d;--ink:#eef6f1;--mute:#9db4a8;--line:#244034;--green:#3ddc97;--gold:#e6b450;--coral:#ff7a6b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.7 'IBM Plex Sans Arabic',Tahoma,sans-serif}
+.w{max-width:680px;margin:0 auto;padding:20px 16px 48px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.logo{font-weight:700;font-size:24px;color:var(--green)}
+.top a{color:var(--mute);font-size:14px;text-decoration:none}
+h1{font-size:30px;line-height:1.35;margin:0 0 10px}
+h1 span{color:var(--green)}
+.sub{color:var(--mute);margin:0 0 24px}
+.cta{display:inline-block;background:var(--green);color:#06281a;font-weight:700;padding:13px 26px;border-radius:12px;text-decoration:none}
+h2{font-size:20px;margin:40px 0 14px}
+.g{display:grid;gap:12px}
+.c{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.c b{display:block;color:var(--gold);margin-bottom:2px}
+.c p{margin:0;color:var(--mute);font-size:15px}
+.priv{border-color:var(--green)}
+form{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+label{display:block;font-size:14px;color:var(--mute);margin:12px 0 4px}
+input{width:100%;padding:12px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px}
+input:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.l{direction:ltr;text-align:left}
+button{width:100%;margin-top:18px;padding:14px;font:700 17px inherit;font-family:inherit;color:#06281a;background:var(--green);border:0;border-radius:12px;cursor:pointer}
+button:disabled{opacity:.6}
+.m{min-height:1.6em;margin-top:10px;font-size:14px;color:var(--coral)}
+.m.ok{color:var(--green)}
+footer{margin-top:36px;color:var(--mute);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="top"><div class="logo">ميزاني</div><a href="index.html">ميزاني للأفراد ←</a></div>
+
+<h1>التثقيف المالي لموظفيك، <span>بدون تعقيد</span></h1>
+<p class="sub">ميزاني يساعد موظفي شركتك على تنظيم رواتبهم وبناء عادات الادخار، من خلال دروس قصيرة وأدوات عملية.</p>
+<a class="cta" href="#req">اطلب عرضًا تجريبيًا</a>
+
+<h2>وش يحصل الموظف؟</h2>
+<div class="g">
+<div class="c"><b>دروس مالية قصيرة</b><p>خطوات تطبيقية سهلة، يكملها الموظف بوقته.</p></div>
+<div class="c"><b>حاسبة تقسيم الراتب</b><p>توزيع الدخل على الالتزامات والمصروفات والادخار.</p></div>
+<div class="c"><b>أهداف الادخار</b><p>يحدد هدفه ومبلغه ومدته ويتابع تقدمه.</p></div>
+</div>
+
+<h2>وش تحصل الشركة؟</h2>
+<div class="g">
+<div class="c"><b>مساحة خاصة بموظفيك</b><p>دعوات آمنة، وتحكم بالمقاعد والاشتراك.</p></div>
+<div class="c"><b>تقارير استخدام إجمالية</b><p>عدد المسجلين ونسب إكمال الدروس.</p></div>
+<div class="c priv"><b>خصوصية الموظف محفوظة</b><p>الشركة لا ترى رواتب الموظفين ولا ديونهم ولا محادثاتهم.</p></div>
+</div>
+
+<h2 id="req">اطلب عرضًا تجريبيًا</h2>
+<form id="f" novalidate>
+<label for="c">اسم الشركة *</label><input id="c" maxlength="99" autocomplete="organization">
+<label for="p">اسمك *</label><input id="p" maxlength="99" autocomplete="name">
+<label for="e">البريد الوظيفي *</label><input id="e" class="l" type="email" maxlength="149" autocomplete="email">
+<label for="n">عدد الموظفين التقريبي *</label><input id="n" class="l" type="number" min="1" inputmode="numeric">
+<label for="t">رقم التواصل (اختياري)</label><input id="t" class="l" type="tel" maxlength="20" autocomplete="tel">
+<div class="m" id="m" role="alert"></div>
+<button id="b" type="submit">أرسل الطلب</button>
+</form>
+<footer>سنراجع طلبك ونتواصل معك قريبًا.</footer>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+/* استبدل السطر التالي كله بسطر var CFG المنسوخ من sidebar.js */
+var CFG={apiKey:"REPLACE",authDomain:"mizanj-15728.firebaseapp.com",projectId:"mizanj-15728"};
+
+firebase.initializeApp(CFG);
+var db=firebase.firestore();
+var $=function(i){return document.getElementById(i)};
+$('f').addEventListener('submit',function(ev){
+  ev.preventDefault();
+  var m=$('m'),b=$('b'),v=function(i){return $(i).value.trim()};
+  var n=parseInt(v('n'),10);
+  m.className='m';
+  if(v('c').length<2||v('p').length<2||!/^\S+@\S+\.\S+$/.test(v('e'))||!(n>0)){
+    m.textContent='عبّ الحقول المطلوبة بشكل صحيح.';return;
+  }
+  var d={companyName:v('c'),contactName:v('p'),email:v('e'),employees:n,status:'new',
+         createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+  if(v('t'))d.phone=v('t');
+  b.disabled=true;m.textContent='';
+  db.collection('demoRequests').add(d).then(function(){
+    $('f').reset();m.className='m ok';m.textContent='وصلنا طلبك، شكرًا لك. بنتواصل معك قريبًا.';
+  }).catch(function(){
+    b.disabled=false;m.textContent='صار خطأ، حاول مرة ثانية.';
+  });
+});
+</script>
+</body>
+</html>
