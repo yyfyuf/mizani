@@ -177,7 +177,21 @@ function reject(b){
   b.disabled=true;
   db.collection('demoRequests').doc(b.dataset.id).update({status:'rejected',reviewedAt:firebase.firestore.FieldValue.serverTimestamp()})
     .then(load).catch(function(e){alert('صار خطأ: '+(e.code||e.message));b.disabled=false});
+}function accept(b){
+  var x=ALL.find(function(r){return r.id===b.dataset.id});if(!x)return;
+  if(!confirm('قبول طلب هذه الشركة وإنشاء رمز انضمام لها؟'))return;
+  b.disabled=true;b.textContent='...';
+  uniqueCode().then(function(code){
+    var d=x.d,ref=db.collection('companies').doc(),batch=db.batch();
+    var T=firebase.firestore.FieldValue.serverTimestamp();
+    batch.set(ref,{name:d.companyName||'شركة',adminEmail:String(d.email||'').toLowerCase(),contactName:d.contactName||'',phone:d.phone||'',seats:Number(d.employees)||0,joinCode:code,status:'active',requestId:x.id,createdAt:T});
+    batch.set(db.collection('joinCodes').doc(code),{companyId:ref.id,active:true});
+    batch.update(db.collection('demoRequests').doc(x.id),{status:'accepted',companyId:ref.id,joinCode:code,reviewedAt:T});
+    return batch.commit();
+  }).then(function(){TAB='accepted';load()})
+    .catch(function(e){alert('صار خطأ: '+(e.code||e.message));b.disabled=false;b.textContent='قبول'});
 }
+
 </script>
 </body>
 </html>
