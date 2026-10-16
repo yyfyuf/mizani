@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>انضم لشركتك | ميزاني</title>
+<style>
+:root{--bg:#06161A;--card:#0C2227;--line:#17453F;--ink:#E8F6F0;--mute:#8DB3A8;--g:#3DDC97;--red:#F07B63}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;padding:20px}
+.c{width:100%;max-width:400px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:26px 22px}
+.l{font-size:28px;font-weight:800;color:var(--g)}
+h2{margin:4px 0;font-size:24px}
+p{color:var(--mute);margin:0 0 16px}
+input{width:100%;background:#08191D;border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:13px 14px;font:inherit;margin-bottom:10px}
+#code{direction:ltr;text-align:center;letter-spacing:6px;font-size:24px;font-weight:700;text-transform:uppercase}
+.b{width:100%;font:inherit;font-weight:700;cursor:pointer;border:0;border-radius:14px;padding:13px;background:linear-gradient(135deg,#3DDC97,#2FC48A);color:#06231A;display:block;text-align:center;text-decoration:none}
+.b:disabled{opacity:.5}
+.t{background:none;border:0;color:var(--g);font:inherit;cursor:pointer;padding:8px 0}
+.msg{min-height:1.6em;margin:0 0 6px;color:var(--red);font-size:14px}
+.msg.ok{color:var(--g)}
+.who{font-size:14px;color:var(--mute);margin-bottom:12px;direction:ltr;text-align:right}
+</style>
+</head>
+<body>
+<div class="c">
+  <div class="l">ميزاني</div>
+
+  <div id="authBox" hidden>
+    <h2 id="at">تسجيل الدخول</h2>
+    <p>سجّل دخولك أول، ثم أدخل رمز شركتك.</p>
+    <form id="af">
+      <input id="em" type="email" placeholder="البريد الإلكتروني" autocomplete="email" required>
+      <input id="pw" type="password" placeholder="كلمة المرور" autocomplete="current-password" required>
+      <div class="msg" id="am"></div>
+      <button class="b" id="ab" type="submit">دخول</button>
+    </form>
+    <button class="t" id="sw" type="button">ما عندك حساب؟ سجّل</button>
+  </div>
+
+  <div id="joinBox" hidden>
+    <div class="who" id="who"></div>
+    <form id="jf">
+      <h2>انضم لشركتك</h2>
+      <p>اكتب الرمز اللي أعطتك إياه شركتك.</p>
+      <input id="code" maxlength="12" placeholder="XXXXXX" autocomplete="off" required>
+      <div class="msg" id="jm"></div>
+      <button class="b" id="jb" type="submit">انضمام</button>
+    </form>
+    <div id="done" hidden>
+      <h2>تم الانضمام ✓</h2>
+      <p>أنت الحين ضمن شركة <b id="cname"></b>.</p>
+      <a class="b" href="index.html">افتح ميزاني</a>
+    </div>
+    <button class="t" id="so" type="button">تسجيل الخروج</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+var CFG=(function(){var x=new XMLHttpRequest();x.open('GET','sidebar.js',false);x.send();var m=x.responseText.match(/var CFG=(\{[^}]*\})/);return (new Function('return '+m[1]))()})();
+firebase.initializeApp(CFG);
+var auth=firebase.auth(),db=firebase.firestore();
+var $=function(i){return document.getElementById(i)};
+var mode='in';
+var ERR={'auth/invalid-email':'البريد غير صحيح.','auth/invalid-credential':'البريد أو كلمة المرور غير صحيحة.','auth/wrong-password':'البريد أو كلمة المرور غير صحيحة.','auth/user-not-found':'البريد أو كلمة المرور غير صحيحة.','auth/email-already-in-use':'هذا البريد مسجّل من قبل، سجّل دخولك.','auth/weak-password':'كلمة المرور لازم 6 أحرف على الأقل.'};
+function amsg(t){$('am').textContent=t}
+
+function view(){
+  var i=mode==='in';
+  $('at').textContent=i?'تسجيل الدخول':'إنشاء حساب';
+  $('ab').textContent=i?'دخول':'إنشاء الحساب';
+  $('sw').textContent=i?'ما عندك حساب؟ سجّل':'عندك حساب؟ ادخل';
+  $('pw').autocomplete=i?'current-password':'new-password';
+  amsg('');
+}
+$('sw').onclick=function(){mode=mode==='in'?'up':'in';view()};
+$('af').onsubmit=function(e){
+  e.preventDefault();amsg('');$('ab').disabled=true;
+  var em=$('em').value.trim(),pw=$('pw').value;
+  (mode==='in'?auth.signInWithEmailAndPassword(em,pw):auth.createUserWithEmailAndPassword(em,pw))
+    .catch(function(x){amsg(ERR[x.code]||'صار خطأ، حاول مرة ثانية.')})
+    .then(function(){$('ab').disabled=false});
+};
+$('so').onclick=function(){auth.signOut()};
+
+function showDone(cid){
+  $('jf').hidden=true;$('done').hidden=false;
+  db.collection('companies').doc(cid).get().then(function(d){$('cname').textContent=d.exists?d.data().name:''}).catch(function(){});
+}
+
+auth.onAuthStateChanged(function(u){
+  if(!u){$('joinBox').hidden=true;$('authBox').hidden=false;return}
+  $('authBox').hidden=true;$('joinBox').hidden=false;
+  $('who').textContent=u.email;
+  db.collection('memberships').where('uid','==',u.uid).limit(1).get().then(function(s){
+    if(s.empty){$('jf').hidden=false;$('done').hidden=true}
+    else showDone(s.docs[0].data().companyId);
+  }).catch(function(){$('jf').hidden=false});
+});
+
+$('jf').onsubmit=function(e){
+  e.preventDefault();
+  var u=auth.currentUser;if(!u)return;
+  var code=$('code').value.trim().toUpperCase();
+  if(code.length<4){$('jm').textContent='اكتب رمز الشركة.';return}
+  $('jm').textContent='';$('jb').disabled=true;
+  db.collection('joinCodes').doc(code).get().then(function(c){
+    if(!c.exists||c.data().active!==true)throw {code:'bad-code'};
+    var cid=c.data().companyId;
+    return db.collection('memberships').doc(cid+'_'+u.uid).set({
+      uid:u.uid,companyId:cid,code:code,role:'employee',
+      joinedAt:firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function(){return c
