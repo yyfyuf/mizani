@@ -69,10 +69,12 @@ var CONFIG={
   projectId:"mizanj-15728",
   messagingSenderId:"",
   appId:""
-};
-// 2) إيميل حسابك في ميزاني
-var ADMIN_EMAIL="ضع_إيميلك_هنا";
+};CONFIG=(function(){var x=new XMLHttpRequest();x.open('GET','sidebar.js',false);x.send();var m=x.responseText.match(/var CFG=(\{[^}]*\})/);return (new Function('return '+m[1]))()})();
 
+// 2) إيميل حسابك في ميزانيvar ADMIN_EMAIL="ra519792@gmail.com";
+
+var ADMIN_EMAIL="ضع_إيميلك_هنا";
+ADMIN_EMAIL="ra519792@gmail.com";
 firebase.initializeApp(CONFIG);
 var auth=firebase.auth(),db=firebase.firestore();
 var $=function(i){return document.getElementById(i)};
