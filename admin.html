@@ -86,7 +86,8 @@ function uniqueCode(){var c=newCode();return db.collection('companies').where('j
 function pick(d,k){for(var i=0;i<k.length;i++){if(d[k[i]])return String(d[k[i]])}return ''}
 function fmt(v){if(v&&typeof v.toDate==='function')return v.toDate().toLocaleString('ar-SA');if(v&&typeof v==='object')return JSON.stringify(v);return String(v)}
 function ts(d){var v=d.createdAt||d.created_at||d.timestamp||d.date;if(v&&v.toMillis)return v.toMillis();if(v){var t=Date.parse(v);if(!isNaN(t))return t}return 0}
-function st(x){return x.d.status||'pending'}
+function st(x){return x.d.status||'pending'}function st(x){var s=x.d.status;return s==='accepted'||s==='rejected'?s:'pending'}
+
 function show(on){$('loginBox').hidden=on;$('app').hidden=!on}
 
 $('login').onsubmit=function(e){
