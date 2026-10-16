@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>إدارة ميزاني</title>
+<style>
+:root{--bg:#06161A;--card:#0C2227;--line:#17453F;--ink:#E8F6F0;--mute:#8DB3A8;--g:#3DDC97;--gold:#F3B63F;--red:#F07B63}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;padding:16px 16px 60px}
+.w{max-width:640px;margin:0 auto}
+h1{font-size:24px;margin:8px 0 14px;color:var(--g)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px}
+input{width:100%;background:#08191D;border:1px solid var(--line);color:var(--ink);border-radius:14px;padding:13px 14px;font:inherit;margin-bottom:10px}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px;padding:11px 16px;font-weight:700}
+button:disabled{opacity:.5}
+.go{background:linear-gradient(135deg,#3DDC97,#2FC48A);color:#06231A;width:100%}
+.ok{background:var(--g);color:#06231A}
+.no{background:transparent;border:1px solid var(--red);color:var(--red)}
+.cp{background:#12353a;color:var(--ink)}
+.out{background:transparent;color:var(--mute);border:1px solid var(--line);padding:6px 12px;font-size:14px}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tabs button{flex:1;background:var(--card);color:var(--mute);border:1px solid var(--line);padding:10px 4px}
+.tabs button.on{background:rgba(61,220,151,.14);color:var(--g);border-color:var(--g)}
+.tabs i{font-style:normal}
+.row{display:flex;gap:10px;margin-top:12px}
+.row button{flex:1}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+dl{margin:10px 0 0}
+dt{color:var(--mute);font-size:13px}
+dd{margin:0 0 8px;word-break:break-word}
+.badge{padding:2px 10px;border-radius:20px;font-size:13px;border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.code{font:700 26px/1.2 ui-monospace,monospace;letter-spacing:4px;color:var(--gold);direction:ltr;text-align:center;padding:12px;background:#08191D;border:1px dashed var(--gold);border-radius:14px;margin-top:10px}
+.msg{color:var(--red);min-height:22px;margin:0}
+</style>
+</head>
+<body>
+<div class="w">
+  <div id="loginBox" class="box">
+    <h1>إدارة ميزاني</h1>
+    <form id="login">
+      <input id="em" type="email" placeholder="البريد الإلكتروني" autocomplete="username" required>
+      <input id="pw" type="password" placeholder="كلمة المرور" autocomplete="current-password" required>
+      <p class="msg" id="err"></p>
+      <button class="go" type="submit">دخول</button>
+    </form>
+  </div>
+
+  <div id="app" hidden>
+    <div class="top"><h1>طلبات الشركات</h1><button class="out" id="so">خروج</button></div>
+    <div class="tabs">
+      <button data-t="pending">جديدة <i>0</i></button>
+      <button data-t="accepted">مقبولة <i>0</i></button>
+      <button data-t="rejected">مرفوضة <i>0</i></button>
+    </div>
+    <div id="list"></div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// 1) استبدل هذا الكائن بإعدادات Firebase الموجودة في sidebar.js (السطر 3)
+var CONFIG={
+  apiKey:"",
+  authDomain:"mizanj-15728.firebaseapp.com",
+  projectId:"mizanj-15728",
+  messagingSenderId:"",
+  appId:""
+};
+// 2) إيميل حسابك في ميزاني
+var ADMIN_EMAIL="ضع_إيميلك_هنا";
+
+firebase.initializeApp(CONFIG);
+var auth=firebase.auth(),db=firebase.firestore();
+var $=function(i){return document.getElementById(i)};
+var esc=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
+var ALL=[],TAB='pending',ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+function newCode(){var a=new Uint32Array(6);crypto.getRandomValues(a);var s='';for(var i=0;i<6;i++)s+=ABC[a[i]%ABC.length];return s}
+function uniqueCode(){var c=newCode();return db.collection('companies').where('joinCode','==',c).limit(1).get().then(function(s){return s.empty?c:uniqueCode()})}
+function pick(d,k){for(var i=0;i<k.length;i++){if(d[k[i]])return String(d[k[i]])}return ''}
+function fmt(v){if(v&&typeof v.toDate==='function')return v.toDate().toLocaleString('ar-SA');if(v&&typeof v==='object')return JSON.stringify(v);return String(v)}
+function ts(d){var v=d.createdAt||d.created_at||d.timestamp||d.date;if(v&&v.toMillis)return v.toMillis();if(v){var t=Date.parse(v);if(!isNaN(t))return t}return 0}
+function st(x){return x.d.status||'pending'}
+function show(on){$('loginBox').hidden=on;$('app').hidden=!on}
+
+$('login').onsubmit=function(e){
+  e.preventDefault();$('err').textContent='';
+  auth.signInWithEmailAndPassword($('em').value.trim(),$('pw').value)
+    .catch(function(){$('err').textContent='الإيميل أو كلمة المرور غير صحيحة'});
+};
+$('so').onclick=function(){auth.signOut()};
+auth.onAuthStateChanged(function(u){
+  if(!u){show(false);return}
+  if((u.email||'').toLowerCase()!==ADMIN_EMAIL.toLowerCase()){
+    auth.signOut();$('err').textContent='هذا الحساب ما عنده صلاحية الإدارة';return;
+  }
+  show(true);load();
+});
+
+function load(){
+  $('list').innerHTML='<p style="color:var(--mute)">جاري التحميل…</p>';
+  db.collection('demoRequests').get().then(function(s){
+    ALL=s.docs.map(function(d){return {id:d.id,d:d.data()}});
+    ALL.sort(function(a,b){return ts(b.d)-ts(a.d)});
+    render();
+  }).catch(function(e){
+    $('list').innerHTML='<p class="msg">تعذّر تحميل الطلبات: '+esc(e.code||e.message)+'</p>';
+  });
+}
+
+function render(){
+  var n={pending:0,accepted:0,rejected:0};
+  ALL.forEach(function(x){n[st(x)]=(n[st(x)]||0)+1});
+  document.querySelectorAll('.tabs button').forEach(function(b){
+    var k=b.dataset.t;b.classList.toggle('on',k===TAB);b.querySelector('i').textContent=n[k]||0;
+  });
+  var rows=ALL.filter(function(x){return st(x)===TAB});
+  $('list').innerHTML=rows.length?rows.map(card).join(''):'<p style="color:var(--mute);text-align:center">لا يوجد شي هنا</p>';
+}
+
+function card(x){
+  var d=x.d,name=pick(d,['companyName','company','company_name','orgName','organization','name'])||'طلب بدون اسم';
+  var label={pending:'جديد',accepted:'مقبول',rejected:'مرفوض'}[st(x)]||esc(st(x));
+  var hide={status:1,companyId:1,joinCode:1,reviewedAt:1};
+  var h='<div class="box"><div class="top"><b>'+esc(name)+'</b><span class="badge">'+label+'</span></div><dl>';
+  Object.keys(d).sort().forEach(function(k){if(!hide[k])h+='<dt>'+esc(k)+'</dt><dd>'+esc(fmt(d[k]))+'</dd>'});
+  h+='</dl>';
+  if(st(x)==='accepted'&&d.joinCode){
+    h+='<div class="code">'+esc(d.joinCode)+'</div><div class="row"><button class="cp" data-a="copy" data-c="'+esc(d.joinCode)+'">نسخ الرمز</button></div>';
+  }
+  if(st(x)==='pending'){
+    h+='<div class="row"><button class="ok" data-a="ok" data-id="'+esc(x.id)+'">قبول</button><button class="no" data-a="no" data-id="'+esc(x.id)+'">رفض</button></div>';
+  }
+  return h+'</div>';
+}
+
+document.querySelector('.tabs').onclick=function(e){
+  var b=e.target.closest('button');if(!b)return;TAB=b.dataset.t;render();
+};
+$('list').onclick=function(e){
+  var b=e.target.closest('button');if(!b)return;
+  var a=b.dataset.a;
+  if(a==='copy'){if(navigator.clipboard)navigator.clipboard.writeText(b.dataset.c);b.textContent='تم النسخ ✓';return}
+  if(a==='ok')accept(b);
+  if(a==='no')reject(b);
+};
+
+function accept(b){
+  var x=ALL.find(function(r){return r.id===b.dataset.id});if(!x)return;
+  if(!confirm('قبول طلب هذه الشركة وإنشاء رمز انضمام لها؟'))return;
+  b.disabled=true;b.textContent='...';
+  uniqueCode().then(function(code){
+    var d=x.d,ref=db.collection('companies').doc(),batch=db.batch();
+    var T=firebase.firestore.FieldValue.serverTimestamp();
+    batch.set(ref,{
+      name:pick(d,['companyName','company','company_name','orgName','organization','name'])||'شركة',
+      adminEmail:pick(d,['email','contactEmail','workEmail','adminEmail']).toLowerCase(),
+      contactName:pick(d,['contactName','fullName','person','managerName']),
+      phone:pick(d,['phone','mobile','whatsapp']),
+      joinCode:code,status:'active',requestId:x.id,createdAt:T
+    });
+    batch.update(db.collection('demoRequests').doc(x.id),{status:'accepted',companyId:ref.id,joinCode:code,reviewedAt:T});
+    return batch.commit();
+  }).then(function(){TAB='accepted';load()})
+    .catch(function(e){alert('صار خطأ: '+(e.code||e.message));b.disabled=false;b.textContent='قبول'});
+}
+
+function reject(b){
+  if(!confirm('رفض هذا الطلب؟'))return;
+  b.disabled=true;
+  db.collection('demoRequests').doc(b.dataset.id).update({status:'rejected',reviewedAt:firebase.firestore.FieldValue.serverTimestamp()})
+    .then(load).catch(function(e){alert('صار خطأ: '+(e.code||e.message));b.disabled=false});
+}
+</script>
+</body>
+</html>
