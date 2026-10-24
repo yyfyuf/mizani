@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>اللوحة المالية | ميزاني للشركات</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1b2a;--sf:#142a40;--ink:#eaf2fb;--mute:#9db3c9;--line:#27425e;--blue:#4f8fe0;--green:#3ddc97;--gold:#e6b450;--coral:#ff7a6b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.7 'IBM Plex Sans Arabic',Tahoma,sans-serif}
+.w{max-width:720px;margin:0 auto;padding:16px 16px 110px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.logo{font-weight:700;font-size:20px;color:var(--blue)}
+.lk{color:var(--blue);text-decoration:none;font-size:14px}
+h1{font-size:24px;margin:0}
+h2{font-size:17px;margin:0 0 10px}
+.sub{color:var(--mute);margin:0 0 14px;font-size:14px}
+.card{background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.kpi{background:var(--sf);border:1px solid var(--line);border-radius:16px;padding:14px}
+.kpi span{display:block;color:var(--mute);font-size:13px}
+.kpi b{display:block;font-size:22px;margin-top:2px}
+.pos{color:var(--green)}.neg{color:var(--coral)}
+label{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
+input,select{width:100%;padding:11px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px}
+input[type=number],input[type=date],input[type=month]{direction:ltr;text-align:left}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn{display:block;width:100%;margin-top:12px;padding:13px;font:700 16px inherit;font-family:inherit;color:#fff;background:var(--blue);border:0;border-radius:12px;cursor:pointer;text-align:center}
+.btn.g{background:var(--green);color:#06231A}
+.btn:disabled{opacity:.6}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg button{padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--mute);font:600 15px inherit;font-family:inherit;cursor:pointer}
+.seg button[aria-pressed=true]{border-color:var(--green);color:var(--green)}
+.seg button.ex[aria-pressed=true]{border-color:var(--coral);color:var(--coral)}
+.bar{height:10px;background:var(--bg);border-radius:6px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;background:var(--green);width:0;transition:width .3s}
+.bar.over i{background:var(--coral)}
+.cb{display:grid;grid-template-columns:90px 1fr 70px;gap:8px;align-items:center;margin:8px 0;font-size:14px}
+.cb i{display:block;height:10px;border-radius:5px;background:var(--coral)}
+.cb span:last-child{text-align:end;direction:ltr}
+.tr{display:flex;align-items:flex-end;gap:8px;height:110px;margin-top:8px}
+.tr div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:11px;color:var(--mute)}
+.tr .p{display:flex;align-items:flex-end;gap:3px;width:100%;flex:1}
+.tr .p i{flex:1;border-radius:4px 4px 0 0;min-height:2px}
+.tx{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.tx:last-child{border:0}
+.tx small{display:block;color:var(--mute);font-size:12px}
+.tx .x{background:none;border:0;color:var(--mute);font-size:20px;cursor:pointer}
+.m{min-height:1.5em;margin-top:8px;font-size:14px;color:var(--coral)}.m.ok{color:var(--green)}
+.hide{display:none!important}
+#cb{position:fixed;bottom:18px;inset-inline-start:16px;width:56px;height:56px;border-radius:50%;border:0;background:var(--green);font-size:26px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.4);z-index:50}
+#cw{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;background:var(--bg)}
+#cw.on{display:flex}
+#ch{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+#cx{background:none;border:0;color:var(--mute);font-size:26px;cursor:pointer}
+#cm{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.mb{max-width:88%;padding:10px 14px;border-radius:16px;white-space:pre-line}
+.mb.b{background:var(--sf);border:1px solid var(--line);align-self:flex-start}
+.mb.u{background:var(--blue);align-self:flex-end}
+#cq{display:flex;gap:8px;overflow-x:auto;padding:8px 14px}
+#cq button{flex:0 0 auto;background:var(--sf);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:7px 13px;font:inherit;font-size:14px;cursor:pointer}
+#cf{display:flex;gap:8px;padding:10px 14px 16px}
+</style>
+</head>
+<body>
+<div class="w">
+
+<div id="v-load"><p class="sub">جاري التحميل...</p></div>
+
+<div id="v-gate" class="hide card">
+<h1>اللوحة المالية</h1>
+<p class="sub">سجّل دخولك أول من صفحة الشركات.</p>
+<a class="btn" href="company.html" style="text-decoration:none">تسجيل الدخول</a>
+</div>
+
+<div id="v-deny" class="hide card">
+<h1>غير مصرّح</h1>
+<p class="sub">هذي اللوحة لمسؤول الشركة فقط. حسابك مو مرتبط بشركة كمسؤول.</p>
+<a class="btn" href="company.html" style="text-decoration:none">رجوع</a>
+</div>
+
+<div id="v-app" class="hide">
+<div class="top"><div class="logo">ميزاني للشركات</div><a class="lk" href="company.html">← لوحة الشركة</a></div>
+<h1 id="cn"></h1>
+<p class="sub">اللوحة المالية</p>
+
+<label for="mo">الشهر</label>
+<input id="mo" type="month">
+
+<div class="grid" style="margin-top:12px">
+<div class="kpi"><span>الإيرادات</span><b class="pos" id="ki">0</b></div>
+<div class="kpi"><span>المصروفات</span><b class="neg" id="ke">0</b></div>
+<div class="kpi"><span>الصافي</span><b id="kn">0</b></div>
+<div class="kpi"><span>المتبقي من الميزانية</span><b id="kb">—</b></div>
+</div>
+
+<div class="card">
+<h2>ميزانية المصروفات الشهرية</h2>
+<div class="bar" id="bb"><i id="bi"></i></div>
+<label for="bd">المبلغ (ريال)</label>
+<input id="bd" type="number" inputmode="decimal" min="0">
+<button class="btn" id="bs" type="button">حفظ الميزانية</button>
+<div class="m" id="bm" role="status"></div>
+</div>
+
+<div class="card">
+<h2>إضافة حركة</h2>
+<div class="seg" id="sg"><button type="button" data-t="income" aria-pressed="true">إيراد</button><button type="button" class="ex" data-t="expense" aria-pressed="false">مصروف</button></div>
+<div class="row2">
+<div><label for="ta">المبلغ</label><input id="ta" type="number" inputmode="decimal" min="0"></div>
+<div><label for="td">التاريخ</label><input id="td" type="date"></div>
+</div>
+<label for="tc">الفئة</label>
+<input id="tc" list="cl" placeholder="مثال: مبيعات، رواتب، إيجار">
+<datalist id="cl"><option value="مبيعات"><option value="خدمات"><option value="رواتب"><option value="إيجار"><option value="تسويق"><option value="مشتريات"><option value="فواتير"><option value="أخرى"></datalist>
+<label for="tn">ملاحظة (اختياري)</label>
+<input id="tn" style="direction:rtl;text-align:right">
+<button class="btn g" id="ts" type="button">إضافة</button>
+<div class="m" id="tm" role="status"></div>
+</div>
+
+<div class="card">
+<h2>استيراد من ملف</h2>
+<p class="sub">ملف Excel أو CSV بأعمدة: التاريخ، النوع (إيراد/مصروف)، المبلغ، الفئة، ملاحظة. لو ما فيه عمود نوع، المبلغ الموجب إيراد والسالب مصروف.</p>
+<input id="fi" type="file" accept=".csv,.xlsx,.xls,text/csv">
+<div class="m" id="fm" role="status"></div>
+</div>
+
+<div class="card"><h2>المصروفات حسب الفئة</h2><div id="cats"></div></div>
+<div class="card"><h2>آخر 6 أشهر</h2><div class="tr" id="trd"></div><p class="sub" style="margin:8px 0 0"><span class="pos">■</span> إيرادات &nbsp; <span class="neg">■</span> مصروفات</p></div>
+<div class="card"><h2>حركات الشهر</h2><div id="txs"></div></div>
+</div>
+</div>
+
+<button id="cb" class="hide" aria-label="المساعد المالي">🤖</button>
+<div id="cw">
+<div id="ch"><b>المساعد المالي</b><button id="cx" aria-label="إغلاق">✕</button></div>
+<div id="cm"></div>
+<div id="cq"></div>
+<form id="cf"><input id="ci" placeholder="اكتب سؤالك..." style="direction:rtl;text-align:right"><button class="btn g" style="width:auto;margin:0;padding:0 18px" type="submit">إرسال</button></form>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function fmt(n){return Math.round(n).toLocaleString("en-US")}
+function pad2(n){return String(n).padStart(2,"0")}
+function ymd(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate())}
+function addM(ym,n){var y=+ym.slice(0,4),m=+ym.slice(5)-1+n;y+=Math.floor(m/12);m=((m%12)+12)%12;return y+"-"+pad2(m+1)}
+function latin(s){return String(s==null?"":s).replace(/[٠-٩]/g,function(d){return "٠١٢٣٤٥٦٧٨٩".indexOf(d)}).replace(/٫/g,".").replace(/٬/g,"")}
+function parseCSV(text){
+  var rows=[],row=[],cur="",q=false;text=String(text).replace(/^\uFEFF/,"");
+  for(var i=0;i<text.length;i++){var c=text[i];
+    if(q){if(c==='"'){if(text[i+1]==='"'){cur+='"';i++}else q=false}else cur+=c}
+    else if(c==='"')q=true;
+    else if(c===","||c===";"||c==="\t"){row.push(cur);cur=""}
+    else if(c==="\n"){row.push(cur);rows.push(row);row=[];cur=""}
+    else if(c!=="\r")cur+=c}
+  if(cur!==""||row.length){row.push(cur);rows.push(row)}
+  return rows.filter(function(r){return r.some(function(x){return String(x).trim()!==""})})}
+function normDate(v){
+  var s=latin(v).trim(),m;
+  if((m=s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/)))return m[1]+"-"+pad2(+m[2])+"-"+pad2(+m[3]);
+  if((m=s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})/)))return m[3]+"-"+pad2(+m[2])+"-"+pad2(+m[1]);
+  if(/^\d{5}(\.\d+)?$/.test(s)){var d=new Date(Math.round((+s-25569)*864e5));return d.getUTCFullYear()+"-"+pad2(d.getUTCMonth()+1)+"-"+pad2(d.getUTCDate())}
+  return ""}
+function normType(v){var s=String(v||"").trim().toLowerCase();
+  if(/income|revenue|sales|إيراد|ايراد|دخل|مبيعات|وارد/.test(s))return "income";
+  if(/expense|cost|مصروف|مصاريف|صرف|منصرف|صادر/.test(s))return "expense";
+  return ""}
+function mapRows(rows){
+  if(!rows.length)return{ok:[],bad:0};
+  var H={date:-1,type:-1,amount:-1,cat:-1,note:-1},first=rows[0].map(function(x){return String(x).trim().toLowerCase()});
+  var isHead=first.some(function(x){return /date|تاريخ|amount|مبلغ|قيمة|type|نوع/.test(x)});
+  var start=0;
+  if(isHead){start=1;first.forEach(function(x,i){
+    if(H.date<0&&/date|تاريخ/.test(x))H.date=i;
+    else if(H.type<0&&/type|نوع/.test(x))H.type=i;
+    else if(H.amount<0&&/amount|مبلغ|قيمة/.test(x))H.amount=i;
+    else if(H.cat<0&&/categ|فئة|تصنيف|بند/.test(x))H.cat=i;
+    else if(H.note<0&&/note|ملاحظ|وصف|بيان/.test(x))H.note=i})}
+  else{H={date:0,type:1,amount:2,cat:3,note:4}}
+  var ok=[],bad=0;
+  for(var i=start;i<rows.length;i++){var r=rows[i];
+    var date=normDate(r[H.date]),raw=parseFloat(latin(r[H.amount]).replace(/[^\d.\-]/g,"")),type=H.type>=0?normType(r[H.type]):"";
+    if(!date||!isFinite(raw)||raw===0){bad++;continue}
+    if(!type)type=raw<0?"expense":"income";
+    ok.push({type:type,amount:Math.abs(raw),date:date,category:String(r[H.cat]||"").trim()||"أخرى",note:String(r[H.note]||"").trim()})}
+  return{ok:ok,bad:bad}}
+function summarize(tx,month,budget){
+  var m=tx.filter(function(t){return t.date.slice(0,7)===month}),inc=0,exp=0,cat={};
+  m.forEach(function(t){if(t.type==="income")inc+=t.amount;else{exp+=t.amount;cat[t.category]=(cat[t.category]||0)+t.amount}});
+  var cats=Object.keys(cat).map(function(k){return[k,cat[k]]}).sort(function(a,b){return b[1]-a[1]});
+  return{month:m,inc:inc,exp:exp,net:inc-exp,cats:cats,left:budget>0?budget-exp:null}}
+
+var CFG={apiKey:"AIzaSyAcekD3uOnosbFcC7bLAERqpuL-uGGAc8o",authDomain:"mizanj-15728.firebaseapp.com",projectId:"mizanj-15728",appId:"1:1020983482594:web:fee2356150d832253fe6bb"};
+var AI_ENDPOINT="";
+firebase.initializeApp(CFG);
+var auth=firebase.auth(),db=firebase.firestore();
+var $=function(i){return document.getElementById(i)};
+var CID=null,CNAME="",UID="",TX=[],BUDGET=0,MONTH=ymd(new Date()).slice(0,7),TYPE="income";
+function show(id){["load","gate","deny","app"].forEach(function(x){$("v-"+x).className=x===id?"":"hide"});$("cb").className=id==="app"?"":"hide"}
+function say(id,t,ok){var e=$(id);e.textContent=t;e.className="m"+(ok?" ok":"")}
+function col(n){return db.collection("companies").doc(CID).collection(n)}
+
+auth.onAuthStateChanged(function(u){
+  if(!u){show("gate");return}
+  UID=u.uid;show("load");
+  db.collection("memberships").where("uid","==",u.uid).get().then(function(s){
+    var m=null;s.forEach(function(d){if(!m&&d.data().role==="admin")m=d.data()});
+    if(!m){show("deny");return}
+    CID=m.companyId;
+    return db.collection("companies").doc(CID).get().then(function(c){
+      if(!c.exists||c.data().status!=="active"){show("deny");return}
+      CNAME=c.data().name||"";$("cn").textContent=CNAME;
+      return load().then(function(){show("app")})})
+  }).catch(function(e){console.error(e);show("deny")});
+});
+
+function load(){
+  return Promise.all([
+    col("settings").doc("finance").get(),
+    col("transactions").orderBy("date","desc").limit(2000).get()
+  ]).then(function(r){
+    BUDGET=r[0].exists?(+r[0].data().monthlyBudget||0):0;
+    TX=[];r[1].forEach(function(d){var x=d.data();x.id=d.id;x.amount=+x.amount||0;x.date=String(x.date||"");TX.push(x)});
+    $("bd").value=BUDGET||"";render()})
+}
+
+function render(){
+  var S=summarize(TX,MONTH,BUDGET);
+  $("mo").value=MONTH;
+  $("ki").textContent=fmt(S.inc);$("ke").textContent=fmt(S.exp);
+  var kn=$("kn");kn.textContent=fmt(S.net);kn.className=S.net>=0?"pos":"neg";
+  var kb=$("kb");
+  if(S.left===null){kb.textContent="—";kb.className=""}else{kb.textContent=fmt(S.left);kb.className=S.left>=0?"pos":"neg"}
+  var pct=BUDGET>0?Math.min(100,S.exp/BUDGET*100):0;
+  $("bi").style.width=pct+"%";$("bb").className="bar"+(BUDGET>0&&S.exp>BUDGET?" over":"");
+  var mx=S.cats.length?S.cats[0][1]:1;
+  $("cats").innerHTML=S.cats.length?S.cats.map(function(c){return'<div class="cb"><span>'+esc(c[0])+'</span><span><i style="width:'+(c[1]/mx*100)+'%"></i></span><span>'+fmt(c[1])+'</span></div>'}).join(""):'<p class="sub">ما فيه مصروفات هذا الشهر.</p>';
+  var ms=[],i;for(i=5;i>=0;i--)ms.push(addM(MONTH,-i));
+  var data=ms.map(function(m){var s=summarize(TX,m,0);return{m:m,i:s.inc,e:s.exp}});
+  var top=Math.max.apply(null,data.map(function(d){return Math.max(d.i,d.e)}).concat([1]));
+  $("trd").innerHTML=data.map(function(d){return'<div><span class="p"><i style="height:'+(d.i/top*100)+'%;background:var(--green)"></i><i style="height:'+(d.e/top*100)+'%;background:var(--coral)"></i></span>'+d.m.slice(5)+'</div>'}).join("");
+  $("txs").innerHTML=S.month.length?S.month.slice(0,60).map(function(t){var inc=t.type==="income";
+    return'<div class="tx"><div><b>'+esc(t.category||"أخرى")+'</b><small>'+esc(t.date)+(t.note?" · "+esc(t.note):"")+'</small></div><div style="display:flex;align-items:center;gap:6px"><b class="'+(inc?"pos":"neg")+'" dir="ltr">'+(inc?"+":"-")+fmt(t.amount)+'</b><button class="x" data-del="'+esc(t.id)+'" aria-label="حذف">×</button></div></div>'}).join(""):'<p class="sub">ما فيه حركات هذا الشهر.</p>';
+}
+
+$("mo").onchange=function(){if(this.value){MONTH=this.value;render()}};
+$("td").value=ymd(new Date());
+Array.prototype.forEach.call($("sg").querySelectorAll("button"),function(b){b.onclick=function(){TYPE=b.dataset.t;Array.prototype.forEach.call($("sg").querySelectorAll("button"),function(x){x.setAttribute("aria-pressed",x===b)})}});
+
+$("bs").onclick=function(){
+  var v=parseFloat($("bd").value)||0;if(v<0)return say("bm","المبلغ لازم يكون موجب.");
+  $("bs").disabled=true;
+  col("settings").doc("finance").set({monthlyBudget:v},{merge:true}).then(function(){BUDGET=v;render();say("bm","تم الحفظ.",1)})
+    .catch(function(e){say("bm","تعذّر الحفظ: "+(e.code||e.message))}).then(function(){$("bs").disabled=false})};
+
+$("ts").onclick=function(){
+  var a=parseFloat($("ta").value),d=$("td").value;
+  if(!(a>0))return say("tm","اكتب مبلغ صحيح.");if(!d)return say("tm","اختر التاريخ.");
+  $("ts").disabled=true;
+  col("transactions").add({type:TYPE,amount:a,date:d,category:$("tc").value.trim()||"أخرى",note:$("tn").value.trim(),by:UID,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+    .then(function(){$("ta").value="";$("tn").value="";say("tm","تمت الإضافة.",1);return load()})
+    .catch(function(e){say("tm","تعذّر الحفظ: "+(e.code||e.message))}).then(function(){$("ts").disabled=false})};
+
+$("txs").onclick=function(e){var b=e.target.closest("button[data-del]");if(!b)return;
+  if(!confirm("حذف هذي الحركة؟"))return;
+  col("transactions").doc(b.dataset.del).delete().then(function(){TX=TX.filter(function(t){return t.id!==b.dataset.del});render()})
+    .catch(function(x){alert("تعذّر الحذف: "+(x.code||x.message))})};
+
+function loadScript(src){return new Promise(function(ok,no){var s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+function readRows(f){
+  if(/\.xlsx?$/i.test(f.name)){
+    return loadScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js").then(function(){return f.arrayBuffer()}).then(function(buf){
+      var wb=XLSX.read(buf,{type:"array",cellDates:false}),ws=wb.Sheets[wb.SheetNames[0]];
+      return XLSX.utils.sheet_to_json(ws,{header:1,raw:false,dateNF:"yyyy-mm-dd",defval:""})})}
+  return f.text().then(parseCSV)}
+$("fi").onchange=function(){
+  var f=this.files[0],inp=this;if(!f)return;say("fm","جاري القراءة...",1);
+  readRows(f).then(function(rows){
+    var R=mapRows(rows);if(!R.ok.length)throw new Error("ما لقيت صفوف صالحة. تأكد من أعمدة التاريخ والمبلغ.");
+    if(!confirm("استيراد "+R.ok.length+" حركة"+(R.bad?" (وتجاهل "+R.bad+" صف غير صالح)":"")+"؟"))return say("fm","");
+    var chunks=[];for(var i=0;i<R.ok.length;i+=400)chunks.push(R.ok.slice(i,i+400));
+    var T=firebase.firestore.FieldValue.serverTimestamp();
+    return chunks.reduce(function(p,ch){return p.then(function(){var b=db.batch();ch.forEach(function(x){x.by=UID;x.createdAt=T;b.set(col("transactions").doc(),x)});return b.commit()})},Promise.resolve())
+      .then(load).then(function(){say("fm","تم استيراد "+R.ok.length+" حركة"+(R.bad?" وتجاهل "+R.bad:"")+".",1)})
+  }).catch(function(e){say("fm",e.message||"تعذّر الاستيراد.")}).then(function(){inp.value=""})};
+
+function ctx(){var S=summarize(TX,MONTH,BUDGET);
+  return{company:CNAME,month:MONTH,currency:"SAR",monthlyBudget:BUDGET,income:S.inc,expenses:S.exp,net:S.net,budgetLeft:S.left,
+    byCategory:S.cats.slice(0,10).map(function(c){return{category:c[0],amount:c[1]}}),
+    recent:S.month.slice(0,40).map(function(t){return{date:t.date,type:t.type,amount:t.amount,category:t.category,note:t.note||""}})}}
+function localAnswer(q){var S=summarize(TX,MONTH,BUDGET);
+  if(!S.month.length)return"ما فيه حركات لهذا الشهر. أضف إيرادات ومصروفات وأحسبها لك.";
+  if(/ربح|صافي|خسار/.test(q))return"صافي "+MONTH+": "+fmt(S.net)+" ريال\n(إيرادات "+fmt(S.inc)+" - مصروفات "+fmt(S.exp)+")"+(S.net<0?"\nالمصروفات أعلى من الإيرادات.":"");
+  if(/إيراد|ايراد|دخل|مبيعات/.test(q))return"إيرادات "+MONTH+": "+fmt(S.inc)+" ريال.";
+  if(/ميزاني|باقي|متبقي/.test(q))return S.left===null?"ما حددت ميزانية شهرية بعد. حدّدها من خانة الميزانية فوق.":(S.left>=0?"متبقي من الميزانية "+fmt(S.left)+" ريال.":"تجاوزت الميزانية بـ "+fmt(-S.left)+" ريال.");
+  if(/وين|أكثر|اكثر|فئة|بند|مصروف|صرف/.test(q))return S.cats.length?"أعلى بنود المصروف:\n"+S.cats.slice(0,4).map(function(c,i){return(i+1)+". "+c[0]+": "+fmt(c[1])}).join("\n"):"ما فيه مصروفات هذا الشهر.";
+  return"أقدر أجاوبك عن: الصافي، الإيرادات، المتبقي من الميزانية، وأعلى المصروفات. اختر من الأزرار تحت.";}
+function add(t,me){var d=document.createElement("div");d.className="mb "+(me?"u":"b");d.textContent=t;$("cm").appendChild(d);$("cm").scrollTop=1e9;return d}
+function ask(q){if(!q)return;add(q,1);
+  if(!AI_ENDPOINT)return add(localAnswer(q));
+  var w=add("...");
+  auth.currentUser.getIdToken().then(function(t){return fetch(AI_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+t},body:JSON.stringify({question:q,context:ctx()})})})
+    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})
+    .then(function(j){w.textContent=j.answer||localAnswer(q)})
+    .catch(function(){w.textContent=localAnswer(q)})}
+["كم صافي الشهر؟","وين أصرف أكثر؟","كم المتبقي من الميزانية؟","كم الإيرادات؟"].forEach(function(q){var b=document.createElement("button");b.type="button";b.textContent=q;b.onclick=function(){ask(q)};$("cq").appendChild(b)});
+$("cb").onclick=function(){$("cw").classList.add("on");if(!$("cm").children.length)add("أهلاً! أنا المساعد المالي لـ"+(CNAME||"شركتك")+". اسألني عن الإيرادات والمصروفات والميزانية.")};
+$("cx").onclick=function(){$("cw").classList.remove("on")};
+$("cf").onsubmit=function(e){e.preventDefault();var v=$("ci").value.trim();$("ci").value="";ask(v)};
+</script>
+</body>
+</html>
