@@ -281,7 +281,9 @@ document.addEventListener("click",function(e){var t=e.target.closest("button");i
   else if(id==="dadd"){S.dues.push(["",1]);panel()}
   else if(D.xdue){S.dues.splice(+D.xdue,1);panel();calc()}
   else if(D.pick){S.pick=D.pick;save();panel()}
-  else if(id==="trial"){S.sub={start:Date.now()};S.tab="an";save();go()}
+    else if(id==="trial"){if(S.sub){if(left()<=0){alert("انتهت تجربتك المجانية. الاشتراك قريبًا.");return}}else S.sub={start:Date.now()};S.tab="an";save();go()}
+  
+  
   else if(id==="exp"){var u=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"})),a=document.createElement("a");a.href=u;a.download="mizani-backup.json";a.click()}
   else if(id==="theme"){var dk=document.documentElement.getAttribute("data-theme")==="dark"||(!S.theme&&matchMedia("(prefers-color-scheme:dark)").matches);S.theme=dk?"light":"dark";theme();save()}});
 function openMenu(){
